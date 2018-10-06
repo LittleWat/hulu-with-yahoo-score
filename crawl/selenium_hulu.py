@@ -17,11 +17,12 @@ class HuluSelenium:
 
     def __init__(self):
         def create_options():
-            options = Options()
+            opt = Options()
             # Chromeのパス（Stableチャネルで--headlessが使えるようになったら不要なはず）
-            options.binary_location = '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary'
+            opt.binary_location = '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary'
             # ヘッドレスモードを有効にする（次の行をコメントアウトすると画面が表示される）。
-            options.add_argument('--headless')
+            opt.add_argument('--headless')
+            return opt
 
         options = create_options()
 
