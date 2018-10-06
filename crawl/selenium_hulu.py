@@ -1,10 +1,12 @@
 # coding: utf-8
 import os
-import time
 
-from scrapy import Selector
 from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class HuluSelenium:
@@ -28,49 +30,40 @@ class HuluSelenium:
                                         chrome_options=options)
         self._driver.get(self.TARGET_URL)
         self._driver.find_element_by_xpath('//*[@id="vod-vid-b-4"]/body/div[2]/main/div[2]/div/div/ul/li[1]').click()
-        time.sleep(1)  # Chromeの場合はAjaxで遷移するので、とりあえず適当に2秒待つ。
 
-    def _scroll(self, wait_sec=5):
+    def _scroll(self):
         self._driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(wait_sec)
 
     def _get_title(self):
-        def get_xpath():
-            return '//*[@id="vod-vid-b-4"]/body/div[2]/main/div[3]/div[1]/div[%d]/a/@data-tracking-panel-title' % self._i
 
-        sel = Selector(text=self._driver.page_source)
-        return sel.xpath(get_xpath()).extract_first()
+        def get_title_xpath():
+            return "/html[@id='vod-vid-b-4']/body/div[@class='vod-frm--user01']/main[@class='vod-frm__main']/div[@class='vod-mod-content']/div[@class='vod-mod-tile']/div[@class='vod-mod-tile__item vod-utl-panel-opener'][%d]/a" % self._i
 
-    def _save_title_list(self, out_filename="hulu_movie_list.tsv"):
-        end_of_line = os.linesep
-        str_ = end_of_line.join(self.title_list)
+        try:
+            wait = WebDriverWait(self._driver, 10)
+            element = wait.until(EC.element_to_be_clickable((By.XPATH, get_title_xpath())))
+            return element.text
 
-        with open(out_filename, 'wt') as f:
-            f.write(str_)
-
-        print("*** Finished saving! ***")
+        except TimeoutException:
+            return None
 
     def run(self):
         while True:
+            self._scroll()
             title = self._get_title()
             if title is None:
-                self._scroll()
-                title = self._get_title()
-                if title is None:
-                    self._scroll()
-                    title = self._get_title()
-                    if title is None:
-                        break
+                break
 
             print(title)
 
             self.title_list.append(title)
             self._i += 1
 
+            with open("hulu_movie_list.tsv", "a") as f:
+                f.write(title + os.linesep)
+
         self._driver.quit()  # ブラウザーを終了する。
         print("*** Finished running! ***")
-
-        self._save_title_list()
 
 
 if __name__ == '__main__':
