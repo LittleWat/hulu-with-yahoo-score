@@ -11,8 +11,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 class HuluSelenium:
     TARGET_URL = 'https://www.happyon.jp/tiles/1039'  # 洋画
+    _out_fn = "hulu_movie_list.txt"
+
     _driver = None
-    title_list = []
+    _title_list = []
     _i = 1
 
     def __init__(self):
@@ -57,10 +59,10 @@ class HuluSelenium:
 
             print(title)
 
-            self.title_list.append(title)
+            self._title_list.append(title)
             self._i += 1
 
-            with open("hulu_movie_list.tsv", "a") as f:
+            with open(self._out_fn, "a") as f:
                 f.write(title + os.linesep)
 
         self._driver.quit()  # ブラウザーを終了する。
