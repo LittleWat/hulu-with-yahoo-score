@@ -34,6 +34,9 @@ class HuluSelenium:
         self._driver.get(self.TARGET_URL)
         self._driver.find_element_by_xpath('//*[@id="vod-vid-b-4"]/body/div[2]/main/div[2]/div/div/ul/li[1]').click()
 
+        if os.path.exists(self._out_fn):
+            os.remove(self._out_fn)
+
     def _scroll(self):
         self._driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
