@@ -1,7 +1,8 @@
 <!doctype html>
 
-<title>Simple tables</title>
+<title>Hulu作品一覧</title>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 <div class=page>
-<h1>Yahoo映画の点数付きHulu視聴可能リスト</h1>
-{{ table|safe }}
+    <h1>Huluの洋画一覧 with Yahoo映画スコア</h1>
+    {{ table|safe }}
 </div>
