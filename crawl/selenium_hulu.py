@@ -11,7 +11,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 class HuluSelenium:
     TARGET_URL = 'https://www.happyon.jp/tiles/1039'  # 洋画
-    _out_fn = "hulu_movie_list.txt"
+    _out_fn = os.path.join("data", "hulu_movie_list.txt.tmp")
 
     _driver = None
     _title_list = []

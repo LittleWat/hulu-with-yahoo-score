@@ -19,8 +19,8 @@ class SearchResultException(IntEnum):
 
 
 class YahooMovieSelenium:
-    _in_fn = "hulu_movie_list.txt"
-    _out_fn = "movie_scores.tsv"
+    _in_fn = os.path.join("data", "hulu_movie_list.txt")
+    _out_fn = os.path.join("data", "movie_scores.tsv.tmp")
     _base_url = 'https://movies.yahoo.co.jp/movie/'
 
     _driver = None
