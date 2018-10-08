@@ -35,7 +35,7 @@ def crawling_job():
 
 
 cron = BackgroundScheduler(daemon=True)
-cron.add_job(func=crawling_job, trigger="cron", hour=17, minute=20)
+cron.add_job(func=crawling_job, trigger="cron", hour=17, minute=30)
 cron.start()
 
 # Shutdown your cron thread if the web process is stopped
