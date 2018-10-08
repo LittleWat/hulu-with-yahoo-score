@@ -1,8 +1,36 @@
 <!doctype html>
 
-<title>Hulu作品一覧</title>
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-<div class=page>
-    <h1>Huluの洋画一覧 with Yahoo映画スコア</h1>
+<html lang="ja">
+<head>
+    <title>Hulu作品一覧</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" rel="stylesheet">
+
+    <!--Footable-->
+    <link rel=stylesheet type=text/css href="/static/css/footable.bootstrap.css">
+
+    <!--FontAwesome-->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+</head>
+
+<body>
+<!--<div class=page>-->
+    <h1>Huluの映画一覧 with Yahoo映画スコア</h1>
+
     {{ table|safe }}
-</div>
+<!--</div>-->
+
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
+<script src="/static/js/footable.js"></script>
+<script>
+    jQuery(function ($) {
+        $('.table').footable();
+    });
+</script>
+</body>
+</html>
