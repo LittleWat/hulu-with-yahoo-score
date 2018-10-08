@@ -1,5 +1,6 @@
 # coding: utf-8
 import atexit
+import datetime
 import os
 import subprocess
 
@@ -8,6 +9,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template
 
 app = Flask(__name__)
+
+last_crawling_time_filename = "./data/last_crawling_time.txt"
 
 
 def crawling_job():
@@ -25,9 +28,14 @@ def crawling_job():
     # tmpを外す
     subprocess.check_call("mv ./data/movie_scores.tsv.tmp ./data/movie_scores.tsv", shell=True)
 
+    # 最後にクローリングした時刻をファイルに書き出す
+    with open(last_crawling_time_filename, mode="w") as f:
+        now = datetime.datetime.now()
+        f.write(now.strftime("%Y-%m-%d %H:%M:%S"))
+
 
 cron = BackgroundScheduler(daemon=True)
-cron.add_job(func=crawling_job, trigger="cron", hour=17, minute=0)
+cron.add_job(func=crawling_job, trigger="cron", hour=17, minute=20)
 cron.start()
 
 # Shutdown your cron thread if the web process is stopped
@@ -48,7 +56,12 @@ def show_tables():
     movie_df = movie_df.sort_values("点数", ascending=False)
     movie_df.reset_index(inplace=True)
     movie_df.index += 1
-    return render_template('view.html', table=add_footable_to_pandas_html(movie_df.to_html()))
+
+    with open(last_crawling_time_filename) as f:
+        last_crawling_time_str = f.read()
+
+    return render_template('view.html', table=add_footable_to_pandas_html(movie_df.to_html()),
+                           last_crawling_time=last_crawling_time_str)
 
 
 if __name__ == "__main__":
