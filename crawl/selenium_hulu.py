@@ -1,12 +1,12 @@
 # coding: utf-8
 import os
 
-from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+
+from util import create_driver
 
 
 class HuluSelenium:
@@ -18,19 +18,7 @@ class HuluSelenium:
     _i = 1
 
     def __init__(self):
-        def create_options():
-            opt = Options()
-            # Chromeのパス（Stableチャネルで--headlessが使えるようになったら不要なはず）
-            opt.binary_location = '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary'
-            # ヘッドレスモードを有効にする（次の行をコメントアウトすると画面が表示される）。
-            opt.add_argument('--headless')
-            return opt
-
-        options = create_options()
-
-        # ChromeのWebDriverオブジェクトを作成する。
-        self._driver = webdriver.Chrome(executable_path='/Users/kwatanabe/.local/bin/chromedriver',
-                                        chrome_options=options)
+        self._driver = create_driver()
         self._driver.get(self.TARGET_URL)
         self._driver.find_element_by_xpath('//*[@id="vod-vid-b-4"]/body/div[2]/main/div[2]/div/div/ul/li[1]').click()
 

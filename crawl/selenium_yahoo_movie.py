@@ -3,14 +3,14 @@
 import os
 from enum import IntEnum
 
-from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from tqdm import tqdm
+
+from util import create_driver
 
 
 class SearchResultException(IntEnum):
@@ -28,20 +28,7 @@ class YahooMovieSelenium:
     _title_list = []
 
     def __init__(self):
-        def create_options():
-            opt = Options()
-            # Chromeのパス（Stableチャネルで--headlessが使えるようになったら不要なはず）
-            opt.binary_location = '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary'
-            # ヘッドレスモードを有効にする（次の行をコメントアウトすると画面が表示される）。
-            opt.add_argument('--headless')
-            return opt
-
-        options = create_options()
-
-        # ChromeのWebDriverオブジェクトを作成する。
-        self._driver = webdriver.Chrome(executable_path='/Users/kwatanabe/.local/bin/chromedriver',
-                                        chrome_options=options)
-
+        self._driver = create_driver()
         self._driver.get(self._base_url)
         self._wait = WebDriverWait(self._driver, 1)
 
