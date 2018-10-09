@@ -77,11 +77,13 @@ class YahooMovieSelenium:
             return [int(SearchResultException.NO_EVALUATION)] * 2
 
     def run(self):
-        for movie in tqdm(self._title_list):
+        # for movie in tqdm(self._title_list):
+        for movie in self._title_list:
             movie = movie.replace(os.linesep, "")
 
             score, n_eval = self._get_result_per_movie(movie)
 
+            print(movie, score, n_eval)
             with open(self._out_fn, "a") as f:
                 f.write("%s\t%s\t%s" % (movie, score, n_eval) + os.linesep)
 

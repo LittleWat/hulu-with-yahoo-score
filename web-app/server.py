@@ -19,14 +19,14 @@ def crawling_job():
     print("------ Hulu Crawling Finished! ------")
 
     # tmpを外す
-    subprocess.check_call("mv data/hulu_movie_list.txt.tmp data/hulu_movie_list.txt", shell=True)
+    subprocess.check_call("cp data/hulu_movie_list.txt.tmp data/hulu_movie_list.txt", shell=True)
 
     print("------ Yahoo-movie Crawling Started! ------")
     subprocess.check_call("python ../crawl/selenium_yahoo_movie.py", shell=True)
     print("------ Yahoo-movie Crawling Finished! ------")
 
     # tmpを外す
-    subprocess.check_call("mv ./data/movie_scores.tsv.tmp ./data/movie_scores.tsv", shell=True)
+    subprocess.check_call("cp ./data/movie_scores.tsv.tmp ./data/movie_scores.tsv", shell=True)
 
     # 最後にクローリングした時刻をファイルに書き出す
     with open(last_crawling_time_filename, mode="w") as f:
@@ -35,7 +35,7 @@ def crawling_job():
 
 
 cron = BackgroundScheduler(daemon=True)
-cron.add_job(func=crawling_job, trigger="cron", hour=17, minute=30)
+cron.add_job(func=crawling_job, trigger="cron", hour=22, minute=30)
 cron.start()
 
 # Shutdown your cron thread if the web process is stopped
