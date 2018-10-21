@@ -17,3 +17,6 @@ pip install -r requirements.txt
 * [herokuでのスケジュール管理にAPSchedulerを使ってみる](http://www.stockdog.work/entry/2017/04/10/003452)
 * [Chrome headless + seleniumをherokuで定期実行](http://katsulog.tech/regularly-run-chrome-headless-selenium-with-heroku/)
 * [herokuのタイムゾーンを変更したらAPSchedulerが動いた話](http://www.stockdog.work/entry/2017/04/15/020130)
+* [herokuでファイルが出力されない](https://stackoverflow.com/questions/39813677/writing-file-in-heroku-filesystem-and-reading-it-with-web-app)
+* [【Heroku Postgresql】アドオンを追加し、テーブル操作を行う](https://www.shookuro.com/entry/2018/03/11/160201)
+* [heroku で DB(postgresql)を利用するときのメモ](https://qiita.com/croquette0212/items/9b4dc5377e7d6f292671)
