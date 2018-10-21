@@ -10,6 +10,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from tqdm import tqdm
 
+from db_setting import Base
+from db_setting import ENGINE
+from db_setting import session
+from items import Hulu
+from items import YahooMovie
 from util import create_driver
 
 
@@ -19,8 +24,6 @@ class SearchResultException(IntEnum):
 
 
 class YahooMovieSelenium:
-    _in_fn = os.path.join("data", "hulu_movie_list.txt")
-    _out_fn = os.path.join("data", "movie_scores.tsv.tmp")
     _base_url = 'https://movies.yahoo.co.jp/movie/'
 
     _driver = None
@@ -33,11 +36,8 @@ class YahooMovieSelenium:
         self._wait = WebDriverWait(self._driver, 1)
 
         # 映画一覧の読み込み
-        with open(self._in_fn) as f:
-            self._title_list = f.readlines()
-
-        if os.path.exists(self._out_fn):
-            os.remove(self._out_fn)
+        self._title_list = [t.title for t in session.query(Hulu.title).all()]
+        print(self._title_list)
 
     def _get_result_per_movie(self, movie):
         # 検索語を入力して送信する。
@@ -77,17 +77,23 @@ class YahooMovieSelenium:
             return [int(SearchResultException.NO_EVALUATION)] * 2
 
     def run(self):
-        # for movie in tqdm(self._title_list):
-        for movie in self._title_list:
+
+        YahooMovie.__table__.drop(ENGINE, checkfirst=True)
+        Base.metadata.create_all(bind=ENGINE, tables=[YahooMovie.__table__])
+
+        for i, movie in tqdm(enumerate(self._title_list)):
             movie = movie.replace(os.linesep, "")
 
             score, n_eval = self._get_result_per_movie(movie)
 
             print(movie, score, n_eval)
-            with open(self._out_fn, "a") as f:
-                f.write("%s\t%s\t%s" % (movie, score, n_eval) + os.linesep)
+
+            hulu = YahooMovie(id=i, title=movie, score=float(score), n_eval=int(n_eval))
+            session.add(hulu)
+            session.commit()
 
         self._driver.quit()  # ブラウザーを終了する。
+
         print("*** Finished running! ***")
 
 
