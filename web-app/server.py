@@ -1,17 +1,20 @@
 # coding: utf-8
 import atexit
-import datetime
 import os
 import subprocess
 
 import pandas as pd
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template
+
+from crawl.db_setting import Base
 from crawl.db_setting import ENGINE
+from crawl.db_setting import session
+from crawl.items import Time
 
 app = Flask(__name__)
 
-last_crawling_time_filename = "./data/last_crawling_time.txt"
+Base.metadata.create_all(bind=ENGINE, tables=[Time.__table__])
 
 
 def crawling_job():
@@ -23,14 +26,15 @@ def crawling_job():
     subprocess.check_call("python ./crawl/selenium_yahoo_movie.py", shell=True)
     print("------ Yahoo-movie Crawling Finished! ------")
 
-    # 最後にクローリングした時刻をファイルに書き出す
-    with open(last_crawling_time_filename, mode="w") as f:
-        now = datetime.datetime.now()
-        f.write(now.strftime("%Y-%m-%d %H:%M:%S"))
+    # 最後にクローリングした時刻をDBに書き出す
+    time = Time()
+    session.add(time)
+    session.commit()
 
 
 cron = BackgroundScheduler(daemon=True)
-cron.add_job(func=crawling_job, trigger="cron", hour=22, minute=30)
+# cron.add_job(func=crawling_job, trigger="cron", hour=22, minute=30)
+cron.add_job(func=crawling_job, trigger="interval", seconds=10)
 cron.start()
 
 # Shutdown your cron thread if the web process is stopped
@@ -51,8 +55,8 @@ def show_tables():
     movie_df = movie_df.sort_values("score", ascending=False)
     movie_df.index += 1
 
-    with open(last_crawling_time_filename) as f:
-        last_crawling_time_str = f.read()
+    last_crawling_time_str = session.query(Time.time).order_by(Time.time.desc()).first()[0].strftime(
+        '%Y-%m-%d %H:%M:%S')
 
     return render_template('view.html', table=add_footable_to_pandas_html(movie_df.to_html()),
                            last_crawling_time=last_crawling_time_str)

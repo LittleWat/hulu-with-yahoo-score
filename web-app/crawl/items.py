@@ -1,9 +1,10 @@
 import sys
+from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy import Column, Integer, String, Float, DateTime
 
-from db_setting import Base
-from db_setting import ENGINE
+from .db_setting import Base
+from .db_setting import ENGINE
 
 
 class Hulu(Base):
@@ -42,6 +43,21 @@ class YahooMovie(Base):
 
     def __repr__(self):
         return '<Title %r>' % self.title
+
+
+class Time(Base):
+    """
+    Time data object
+    """
+    __tablename__ = 'time'
+    id = Column('id', Integer, primary_key=True, autoincrement=True)
+    time = Column('time', DateTime)
+
+    def __init__(self):
+        self.time = datetime.now()
+
+    def __repr__(self):
+        return '<Time %r>' % self.time
 
 
 def main(args):

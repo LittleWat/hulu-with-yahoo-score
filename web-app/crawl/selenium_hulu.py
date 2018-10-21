@@ -5,11 +5,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from db_setting import Base
-from db_setting import ENGINE
-from db_setting import session
-from items import Hulu
-from util import create_driver
+from .db_setting import Base
+from .db_setting import ENGINE
+from .db_setting import session
+from .items import Hulu
+from .util import create_driver
 
 
 class HuluSelenium:

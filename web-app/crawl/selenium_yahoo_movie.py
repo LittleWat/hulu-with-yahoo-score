@@ -10,12 +10,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from tqdm import tqdm
 
-from db_setting import Base
-from db_setting import ENGINE
-from db_setting import session
-from items import Hulu
-from items import YahooMovie
-from util import create_driver
+from .db_setting import Base
+from .db_setting import ENGINE
+from .db_setting import session
+from .items import Hulu
+from .items import YahooMovie
+from .util import create_driver
 
 
 class SearchResultException(IntEnum):
