@@ -7,6 +7,7 @@ import subprocess
 import pandas as pd
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template
+from crawl.db_setting import ENGINE
 
 app = Flask(__name__)
 
@@ -15,18 +16,12 @@ last_crawling_time_filename = "./data/last_crawling_time.txt"
 
 def crawling_job():
     print("------ Hulu Crawling Started! ------")
-    subprocess.check_call("python ../crawl/selenium_hulu.py", shell=True)
+    subprocess.check_call("python ./crawl/selenium_hulu.py", shell=True)
     print("------ Hulu Crawling Finished! ------")
 
-    # tmpを外す
-    subprocess.check_call("cp data/hulu_movie_list.txt.tmp data/hulu_movie_list.txt", shell=True)
-
     print("------ Yahoo-movie Crawling Started! ------")
-    subprocess.check_call("python ../crawl/selenium_yahoo_movie.py", shell=True)
+    subprocess.check_call("python ./crawl/selenium_yahoo_movie.py", shell=True)
     print("------ Yahoo-movie Crawling Finished! ------")
-
-    # tmpを外す
-    subprocess.check_call("cp ./data/movie_scores.tsv.tmp ./data/movie_scores.tsv", shell=True)
 
     # 最後にクローリングした時刻をファイルに書き出す
     with open(last_crawling_time_filename, mode="w") as f:
@@ -52,9 +47,8 @@ def add_footable_to_pandas_html(text):
 
 @app.route("/")
 def show_tables():
-    movie_df = pd.read_csv("./data/movie_scores.tsv", sep="\t", names=["タイトル", "点数", "評価数"], index_col=0)
-    movie_df = movie_df.sort_values("点数", ascending=False)
-    movie_df.reset_index(inplace=True)
+    movie_df = pd.read_sql("SELECT title, score, n_eval FROM yahoo", ENGINE)
+    movie_df = movie_df.sort_values("score", ascending=False)
     movie_df.index += 1
 
     with open(last_crawling_time_filename) as f:
