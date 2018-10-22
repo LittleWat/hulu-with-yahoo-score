@@ -37,7 +37,7 @@ def crawling_job():
 
 
 cron = BackgroundScheduler(daemon=True)
-cron.add_job(func=crawling_job, trigger="cron", hour=1, minute=0)
+cron.add_job(func=crawling_job, trigger="cron", hour=7, minute=20)
 # cron.add_job(func=crawling_job, trigger="interval", seconds=10)
 cron.start()
 
