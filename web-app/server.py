@@ -29,8 +29,11 @@ def show_tables():
     movie_df = movie_df.sort_values("score", ascending=False)
     movie_df.index = np.arange(1, movie_df.shape[0] + 1)
 
-    last_crawling_time_str = session.query(Time.time).order_by(Time.time.desc()).first()[0].strftime(
-        '%Y-%m-%d %H:%M:%S')
+    try:
+        last_crawling_time_str = session.query(Time.time).order_by(Time.time.desc()).first()[0].strftime(
+            '%Y-%m-%d %H:%M:%S')
+    except TypeError:
+        last_crawling_time_str = "not finished yet..."
 
     return render_template('view.html', table=add_footable_to_pandas_html(movie_df.to_html()),
                            last_crawling_time=last_crawling_time_str)
