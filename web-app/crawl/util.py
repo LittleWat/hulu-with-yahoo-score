@@ -10,6 +10,20 @@ def create_driver():
 
     # ヘッドレスモードを有効にする（次の行をコメントアウトすると画面が表示される）。
     options.add_argument('--headless')
+    options.add_argument('--disable-gpu')
+    options.add_argument('--no-sandbox')
+
+    # エラーの許容
+    options.add_argument('--ignore-certificate-errors')
+    options.add_argument('--allow-running-insecure-content')
+    options.add_argument('--disable-web-security')
+
+    # headlessでは不要そうな機能
+    options.add_argument('--disable-desktop-notifications')
+    options.add_argument("--disable-extensions")
+
+    # 言語
+    options.add_argument('--lang=ja')
 
     # for local mac
     if platform.system() == "Darwin":
