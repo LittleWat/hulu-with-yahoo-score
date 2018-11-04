@@ -29,15 +29,18 @@ class YahooMovieSelenium:
     _driver = None
     _wait = None
     _title_list = []
+    _N_SETUP_DRIVER = 50
 
     def __init__(self):
-        self._driver = create_driver()
-        self._driver.get(self._base_url)
-        self._wait = WebDriverWait(self._driver, 1)
-
+        self._setup_driver()
         # 映画一覧の読み込み
         self._title_list = [t.title for t in session.query(Hulu.title).all()]
         print(self._title_list)
+
+    def _setup_driver(self):
+        self._driver = create_driver()
+        self._driver.get(self._base_url)
+        self._wait = WebDriverWait(self._driver, 1)
 
     def _get_result_per_movie(self, movie):
         # 検索語を入力して送信する。
@@ -91,6 +94,10 @@ class YahooMovieSelenium:
             hulu = YahooMovie(id=i, title=movie, score=float(score), n_eval=int(n_eval))
             session.add(hulu)
             session.commit()
+
+            if i % self._N_SETUP_DRIVER == 0:
+                self._driver.quit()
+                self._setup_driver()
 
         self._driver.quit()  # ブラウザーを終了する。
 
