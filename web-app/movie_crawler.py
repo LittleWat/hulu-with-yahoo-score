@@ -25,9 +25,9 @@ def crawling_job():
     session.commit()
 
 
-def register_job_to_aspscheduler():
+def register_crawling_job_to_aspscheduler():
     cron = BackgroundScheduler(daemon=True)
-    cron.add_job(func=crawling_job, trigger="cron", hour=7, minute=20)
+    cron.add_job(func=crawling_job, trigger="cron", hour=3, minute=0)
     # cron.add_job(func=crawling_job, trigger="interval", seconds=10)
     cron.start()
 

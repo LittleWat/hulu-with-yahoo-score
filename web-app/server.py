@@ -9,6 +9,7 @@ from crawl.db_setting import Base
 from crawl.db_setting import ENGINE
 from crawl.db_setting import session
 from crawl.items import Time
+from movie_crawler import register_crawling_job_to_aspscheduler
 
 app = Flask(__name__)
 
@@ -40,5 +41,7 @@ def show_tables():
 
 
 if __name__ == "__main__":
+    register_crawling_job_to_aspscheduler()
+
     port = os.environ.get("PORT", "5000")
     app.run(host="0.0.0.0", port=int(port), debug=True, use_reloader=False)
