@@ -1,6 +1,11 @@
 # hulu-with-yahoo-score
 
-Huluの映画リストをyahoo映画のスコアと紐付け表示するスクリプト
+Hulu配信作品をYahoo映画のスコアでランク付けしたサイトをherokuで生成
+
+- このコードが生成したサイト
+   - https://hulu-with-yahoo-score.herokuapp.com
+- qiitaの記事
+   - https://qiita.com/LittleWat/items/7615923a2cfbb3a7fcef
 
 
 ## 設定
