@@ -3,6 +3,9 @@
 <html lang="ja">
 <head>
     <title>Hulu作品一覧</title>
+    
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <meta name="description" content="Huluの映画一覧を毎日取得し、Yahoo映画のスコアと紐づけて表示するサイトです。">
 
     <!-- Bootstrap core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
@@ -17,10 +20,10 @@
 
 <body>
 <!--<div class=page>-->
-    <h1>Huluの映画一覧 with Yahoo映画スコア</h1>
+<h1>Huluの映画一覧 with Yahoo映画スコア</h1>
 
-    <h4>最終更新時刻: {{last_crawling_time}}</h4>
-    {{ table|safe }}
+<h4>最終更新時刻: {{last_crawling_time}}</h4>
+{{ table|safe }}
 <!--</div>-->
 
 <!-- Placed at the end of the document so the pages load faster -->
