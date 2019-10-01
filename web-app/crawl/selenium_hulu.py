@@ -13,7 +13,7 @@ from .util import create_driver
 
 
 class HuluSelenium:
-    TARGET_URL = 'https://www.happyon.jp/tiles/1039'  # 洋画
+    TARGET_URL = 'https://www.hulu.jp/tiles/1039'  # 洋画
 
     _driver = None
     _title_list = []
